@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 export const ButtonLoad = styled.button`
-  margin-left: 600px;
+  margin: 0 auto;
   padding: 15px 25px;
   border-radius: 30px;
   background-color: #15cfaa;
@@ -17,7 +17,7 @@ export const ButtonLoad = styled.button`
   line-height: 24px;
   font-style: normal;
   font-weight: 500;
-  min-width: 180px;
+  width: 280px;
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
     0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     &:hover,
