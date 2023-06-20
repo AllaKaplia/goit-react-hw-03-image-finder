@@ -3,7 +3,7 @@ import ImageGalleryItem from "components/ImageGalleryItem";
 import Loader from "components/Loader";
 import { Component } from "react";
 import { toast } from "react-toastify";
-
+import axios from 'axios';
 import { GalleryList } from "./ImageGallery.styled";
 
 class ImageGallery extends Component {
@@ -12,7 +12,7 @@ class ImageGallery extends Component {
     page: 1,
     loading: false,
     error: null,
-    status: 'idle',
+    totalHits: 0,
   };
   
   handleLoadMore = () => {
@@ -30,23 +30,33 @@ class ImageGallery extends Component {
   
     const KEY = '35944916-0a227103958c105cd60c29ad2';
     const { page } = this.state;
+    const perPage = 12;
   
-    fetch(`https://pixabay.com/api/?q=${this.props.imagesName}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-  
-        return Promise.reject(
-          new Error(`There are no images with the name ${this.props.imagesName}`),
-        );
+    axios
+      .get(`https://pixabay.com/api/`, {
+        params: {
+          q: this.props.imagesName,
+          page: page,
+          key: KEY,
+          image_type: 'photo',
+          orientation: 'horizontal',
+          per_page: perPage,
+        },
       })
-      .then(data => {
+      .then(response => {
+        const data = response.data;
         const hits = data.hits;
-        if(hits.length === 0) {
-          toast.error('No images found for this request! Try again')
+        const totalHits = data.totalHits;
+  
+        if (hits.length === 0) {
+          toast.error('No images found for this request! Try again');
         }
-        this.setState(prevState => ({ images: [...prevState.images, ...hits], loading: false }));
+  
+        this.setState(prevState => ({
+          images: [...prevState.images, ...hits],
+          loading: false,
+          totalHits: totalHits,
+        }));
       })
       .catch(error => this.setState({ error, loading: false }));
   };
@@ -60,25 +70,32 @@ class ImageGallery extends Component {
   }
 
   render() {
-    const { images, loading } = this.state;
+    const { images, loading, totalHits } = this.state;
+
+    if (totalHits === 0) {
+      return null;
+    }
   
     return (
-      <GalleryList>
-        {images.map(({ id, webformatURL, tags }) => (
-          <ImageGalleryItem
-            key={id}
-            webformatURL={webformatURL}
-            data-tags={tags}
-          />
-        ))}
+      <>
+        <GalleryList>
+          {images.map(({ id, webformatURL, tags, largeImageURL }) => (
+            <ImageGalleryItem
+              key={id}
+              webformatURL={webformatURL}
+              largeImageURL={largeImageURL}
+              data-tags={tags}
+            />
+          ))}
+        </GalleryList>
         {loading ? (
           <Loader />
         ) : (
-          images.length > 11 && <Button onClick={this.handleLoadMore} />
+          images.length < totalHits && <Button onClick={this.handleLoadMore} />
         )}
-      </GalleryList>
+      </>
     );
   }  
 }
 
-export default ImageGallery; 
+export default ImageGallery;
