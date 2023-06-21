@@ -14,6 +14,14 @@ class ImageGallery extends Component {
     error: null,
     totalHits: 0,
   };
+    
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.imagesName !== this.props.imagesName) {
+      this.setState({ images: [], page: 1 }, () => {
+        this.fetchImages();
+      });
+    }
+  }
   
   handleLoadMore = () => {
     this.setState(prevState => {
@@ -60,14 +68,6 @@ class ImageGallery extends Component {
       })
       .catch(error => this.setState({ error, loading: false }));
   };
-  
-  componentDidUpdate(prevProps) {
-    if (prevProps.imagesName !== this.props.imagesName) {
-      this.setState({ images: [], page: 1 }, () => {
-        this.fetchImages();
-      });
-    }
-  }
 
   render() {
     const { images, loading, totalHits } = this.state;
