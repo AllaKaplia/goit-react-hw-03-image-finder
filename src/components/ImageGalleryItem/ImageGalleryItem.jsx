@@ -20,7 +20,7 @@ export default class ImageGalleryItem extends Component {
     return (
       <>
         <GalleryItem key={id}>
-          <ImageGallery src={webformatURL} alt={tags} onClick={this.toggleModal} />
+        <ImageGallery src={webformatURL} alt={tags} onClick={this.toggleModal} />
         </GalleryItem>
         {showModal && (
           <Modal onClose={this.toggleModal}>
