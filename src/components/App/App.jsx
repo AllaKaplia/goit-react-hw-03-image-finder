@@ -18,7 +18,7 @@ class App extends Component {
     page: 1,
     loading: false,
     error: null,
-    totalImages: false,
+    totalImages: 0,
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -61,6 +61,7 @@ class App extends Component {
       this.setState(prevState => ({
         images: [...prevState.images, ...data.hits],
         totalImages: data.totalHits,
+        loading: false,
         error: null
       }));
     } catch (error){
@@ -101,8 +102,9 @@ class App extends Component {
         <SearchBar onSubmit={this.handleSearchNameSubmit} />
         <ImageGallery images={images}/>
         {loading && <Loader />}
+        {images.length < totalImages && images.length > 0 && 
+        <Button onClick={this.handleLoadMore} />}
         {error && <ErrorMessage>{error}</ErrorMessage>}
-        {images.length < totalImages && images.length > 0 && <Button onClick={this.handleLoadMore} />}
         <ToastContainer autoClose={3000} theme="dark" />
       </Container>
     );
