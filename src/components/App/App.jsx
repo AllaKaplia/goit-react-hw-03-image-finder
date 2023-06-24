@@ -26,9 +26,7 @@ class App extends Component {
       prevState.imagesName !== this.state.imagesName ||
       prevState.page !== this.state.page
     ) {
-      this.setState({ images: [], page: 1 }, () => {
-        this.foundImages();
-      });
+      this.foundImages()
     }
   }
 
