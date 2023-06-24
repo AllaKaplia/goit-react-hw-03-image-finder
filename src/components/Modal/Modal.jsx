@@ -6,16 +6,15 @@ import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 const modalRoot = document.querySelector('#modal-root');
 
 export default class Modal extends Component {
-    componentDidMount() {
-        window.addEventListener('keydown', this.handleKeydown);
-        disableBodyScroll(document.querySelector('#modal-root'));
-      }
-      
-      componentWillUnmount() {
-        window.removeEventListener('keydown', this.handleKeydown);
-        enableBodyScroll(document.querySelector('#modal-root'));
-      }
-      
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeydown);
+    disableBodyScroll(modalRoot);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeydown);
+    enableBodyScroll(modalRoot);
+  }
 
   handleKeydown = (evt) => {
     if (evt.code === 'Escape') {
