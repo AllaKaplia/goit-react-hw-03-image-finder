@@ -1,16 +1,20 @@
 import { Component } from "react";
 import { GalleryItem, ImageGallery } from "./ImageGalleryItem.styled";
-import Modal from '../Modal';
+import Modal from "../Modal";
 
 export default class ImageGalleryItem extends Component {
   state = {
     showModal: false,
-  }
+  };
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({
-      showModal: !showModal
-    }))
+      showModal: !showModal,
+    }));
+  };
+
+  componentDidMount() {
+    document.body.classList.remove("modal-open"); // Remove the class to re-enable scrolling
   }
 
   render() {
@@ -20,7 +24,7 @@ export default class ImageGalleryItem extends Component {
     return (
       <>
         <GalleryItem key={id}>
-        <ImageGallery src={webformatURL} alt={tags} onClick={this.toggleModal} />
+          <ImageGallery src={webformatURL} alt={tags} onClick={this.toggleModal} />
         </GalleryItem>
         {showModal && (
           <Modal onClose={this.toggleModal}>
